@@ -1,0 +1,11 @@
+html * {
+  font-family: monospace, monospace;
+}
+
+body {
+  font-size: 16px;
+}
+
+input {
+  box-sizing: border-box;
+}
