@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
-import { getPosts } from "../../api/mock";
+import { getPosts } from "../../api/api";
 import { SupermetricsPost, SupermetricsUser } from "../../interfaces";
 import { noop } from "../../utils/js";
+import { useAuthState } from "../auth/useAuthState";
 
 export interface PostsState {
   posts: SupermetricsPost[];
@@ -27,6 +28,7 @@ export const postsDefaultState = {
 };
 
 export const usePosts = () => {
+  const { user } = useAuthState();
   const [posts, setPosts] = useState<SupermetricsPost[]>([]);
   const [postsLoading, setPostsLoading] = useState<boolean>(false);
 
@@ -35,16 +37,20 @@ export const usePosts = () => {
   }, [setPosts]);
 
   const loadPosts = useCallback(async () => {
+    if (!user) {
+      throw new Error("not logged in");
+    }
+
     try {
       setPostsLoading(true);
 
-      const result = await getPosts();
+      const result = await getPosts(user.token);
 
       setPosts(result.data.data.posts);
     } finally {
       setPostsLoading(false);
     }
-  }, [setPosts, setPostsLoading]);
+  }, [setPosts, setPostsLoading, user]);
 
   const postsByUserId = useMemo(() => {
     return posts.reduce(

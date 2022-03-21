@@ -2,8 +2,7 @@ import { renderHook } from "@testing-library/react-hooks";
 import { act } from "react-dom/test-utils";
 import { useAuth } from "./useAuth";
 
-// TODO: Update this when using the real endpoint
-jest.mock("../../api/mock", () => ({
+jest.mock("../../api/api", () => ({
   register: () =>
     Promise.resolve({
       data: {

@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useCallback, useState } from "react";
-import { register } from "../../api/mock";
+import { register } from "../../api/api";
 import { User } from "../../interfaces";
 
 const LOCAL_STORAGE_KEY = "auth";
@@ -40,7 +40,7 @@ export const useAuth = () => {
     async (name: string, email: string, onSuccess: () => void) => {
       setIsLoading(true);
       try {
-        const result = await register(email);
+        const result = await register(name, email);
 
         setUserWithLocalStorage({ name, email, token: result.data.data.sl_token });
 
